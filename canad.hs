@@ -4,8 +4,8 @@ import Control.Monad (forM, when)
 import Control.Exception (assert)
 import System.IO (openFile, IOMode(..), Handle)
 import Data.Maybe (fromJust)
-import Data.List (foldl', findIndex)
-import Data.Text hiding (foldl', map, findIndex, length)
+import Data.List (findIndex)
+import Data.Text hiding (map, findIndex, length)
 import Data.ByteString.Lex.Double (unsafeReadDouble)
 import Data.Text.IO hiding (putStrLn)
 import Data.Text.Encoding (encodeUtf8)
@@ -196,12 +196,10 @@ getContext f
     ny = S.size ys
     xl = getValues f "LON"
     yl = getValues f "LAT"
-    -- xs es un conjunto (Set) definido mediante la aplicacion
-    -- sucesiva (foldl') de Set.insert (con los parametros intercambiados por flip)
-    -- sobre la lista de todas las xs
-    xs = foldl' (flip S.insert) S.empty xl
+    -- xs es un conjunto (Set) a partir de la lista xl
+    xs = S.fromList xl
     -- lo mismo para las ys
-    ys = foldl' (flip S.insert) S.empty yl
+    ys = S.fromList yl
     -- la proyeccion a piñon porque la sabemos y no cambia
     pj = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
